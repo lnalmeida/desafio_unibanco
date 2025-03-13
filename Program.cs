@@ -1,11 +1,16 @@
 using DesafioUnibanco.Entities;
+using Microsoft.Extensions.Logging.Console;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 
@@ -20,7 +25,7 @@ app.UseHttpsRedirection();
 
 var transactions = new List<Transaction>();
 
-app.MapPost("/transacao", async (HttpContext context) =>
+app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) =>
     {
         try
         {
@@ -31,14 +36,17 @@ app.MapPost("/transacao", async (HttpContext context) =>
                 new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             
             transactions.Add(transaction);
+            logger.LogInformation("Transação cadastrada.");
             return Results.StatusCode(StatusCodes.Status201Created);
         }
         catch (ArgumentException e)
         {
+            logger.LogError(e.Message, "Erro ao cadastrar transação.");
             return Results.StatusCode(StatusCodes.Status422UnprocessableEntity);
         }
         catch (Exception e)
         {
+            logger.LogError(e.Message, "Erro ao cadastrar transação.");
             return Results.StatusCode(StatusCodes.Status400BadRequest);
         }
     })

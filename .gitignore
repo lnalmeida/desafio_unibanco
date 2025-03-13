@@ -1,0 +1,102 @@
+# Ignora arquivos de build e dependências
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+out/
+.vs/
+*.user
+*.suo
+*.cache
+*.swp
+*.swo
+*.log
+*.nupkg
+*.ncrunchsolution
+*.ncrunchproject
+
+# Ignora arquivos de configuração local
+appsettings.Development.json
+appsettings.Local.json
+appsettings.Secrets.json
+
+# Ignora arquivos de dependências
+**/node_modules/
+**/packages/
+**/wwwroot/lib/
+
+# Ignora arquivos de banco de dados local
+*.db
+*.mdf
+*.ldf
+
+# Ignora arquivos de logs
+logs/
+*.log
+
+# Ignora arquivos de ambiente
+.env
+.env.local
+.env.development
+.env.production
+
+# Ignora arquivos do Docker
+docker-compose.override.yml
+docker-compose.debug.yml
+
+# Ignora arquivos específicos do Rider
+.idea/
+*.sln.iml
+*.DotSettings
+*.DotSettings.user
+*.idea/
+*.idea_modules/
+*.iml
+*.ipr
+*.iws
+
+# Ignora arquivos do ReSharper (se aplicável)
+_ReSharper.*
+*.ReSharper
+*.ReSharper.user
+
+# Ignora arquivos do dotnet
+.dotnet/
+.history/
+
+# Ignora arquivos de cache do Rider
+.idea/.idea.[ProjectName].dir/
+.idea/.name
+.idea/caches/
+.idea/dataSources/
+.idea/dataSources.ids
+.idea/dataSources.local.xml
+.idea/inspectionProfiles/
+.idea/libraries/
+.idea/modules.xml
+.idea/runConfigurations/
+.idea/shelf/
+.idea/tasks.xml
+.idea/vcs.xml
+.idea/workspace.xml
+
+# Ignora arquivos de configuração do Rider
+.idea/.name
+.idea/codeStyles/
+.idea/codeStyles/codeStyleConfig.xml
+.idea/encodings.xml
+.idea/externalDependencies.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/runConfigurations/
+.idea/vcs.xml
+.idea/workspace.xml
+
+# Ignora arquivos de testes
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Ignora arquivos de publicação
+publish/
