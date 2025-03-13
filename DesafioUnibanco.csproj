@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.12"/>
+        <PackageReference Include="NUnit" Version="4.3.2" />
+        <PackageReference Include="NUnitTestAdapter" Version="2.3.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="TransactionsTest\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="TransactionsTest\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="TransactionsTest\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="TransactionsTest\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="TransactionsTest\bin\Debug\net8.0\TransactionsTest.deps.json" />
+      <_ContentIncludedByDefault Remove="TransactionsTest\bin\Debug\net8.0\TransactionsTest.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="TransactionsTest\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="TransactionsTest\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="TransactionsTest\obj\TransactionsTest.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="DesafioUnibanco.Test\obj\DesafioUnibanco.Test.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="DesafioUnibanco.Test\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="DesafioUnibanco.Test\obj\project.packagespec.json" />
+    </ItemGroup>
+
+</Project>
