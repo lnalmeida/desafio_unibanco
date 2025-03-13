@@ -5,9 +5,10 @@ namespace DesafioUnibanco.Entities;
 
 public class Transaction
 {
-
-    public DateTime DataHora { get; }
-    public double Valor { get; }
+    [JsonInclude]
+    private DateTime DataHora { get; }
+    [JsonInclude]
+    private double Valor { get; }
     
     public Transaction () {}
     
@@ -18,7 +19,7 @@ public class Transaction
         Valor = valor;
         DataHora = dataHora;
     }
-
+    
 	public override string ToString()
     {
         string formattedDataHora = DataHora.ToString("o");

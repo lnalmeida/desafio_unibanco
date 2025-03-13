@@ -25,7 +25,7 @@ app.UseHttpsRedirection();
 
 var transactions = new List<Transaction>();
 
-app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) =>
+app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) => 
     {
         try
         {
@@ -37,6 +37,7 @@ app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) =
             
             transactions.Add(transaction);
             logger.LogInformation("Transação cadastrada.");
+            Console.WriteLine(transactions.Count);
             return Results.StatusCode(StatusCodes.Status201Created);
         }
         catch (ArgumentException e)
@@ -50,7 +51,21 @@ app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) =
             return Results.StatusCode(StatusCodes.Status400BadRequest);
         }
     })
+    .Accepts<Transaction>("application/json")
+    .Produces(StatusCodes.Status201Created)
+    .Produces(StatusCodes.Status422UnprocessableEntity)
+    .Produces(StatusCodes.Status400BadRequest)
     .WithName("AddTransaction")
+    .WithOpenApi();
+
+app.MapDelete("/transacao", (ILogger<Program> logger) =>
+    {
+        logger.LogInformation("Lista de transações apagada.");
+        transactions.Clear();
+        Console.WriteLine(transactions.Count);
+        return Results.StatusCode(StatusCodes.Status200OK);
+    })
+    .WithName("ClearTransactions")
     .WithOpenApi();
 
 app.Run();
