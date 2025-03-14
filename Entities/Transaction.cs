@@ -9,6 +9,7 @@ public class Transaction
     private DateTime DataHora { get; }
     [JsonInclude]
     private double Valor { get; }
+    private DateTime CreatedAt { get; }
     
     public Transaction () {}
     
@@ -18,7 +19,12 @@ public class Transaction
 		ValidateFields(dataHora, valor);
         Valor = valor;
         DataHora = dataHora;
+        CreatedAt = DateTime.Now;
     }
+    
+    public DateTime GetDataHora() => DataHora;
+    public double GetValor() => Valor;
+    public DateTime GetCreatedAt() => CreatedAt;
     
 	public override string ToString()
     {

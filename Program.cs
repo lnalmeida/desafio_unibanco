@@ -36,7 +36,7 @@ app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) =
                 new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             
             transactions.Add(transaction);
-            logger.LogInformation("Transação cadastrada.");
+            logger.LogInformation($"Transação cadastrada.{transactions.Count}");
             Console.WriteLine(transactions.Count);
             return Results.StatusCode(StatusCodes.Status201Created);
         }
@@ -58,11 +58,43 @@ app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) =
     .WithName("AddTransaction")
     .WithOpenApi();
 
+app.MapGet("/estatisca", (ILogger<Program> logger) =>
+    {
+        var lastTransactions = transactions.Where(t => 
+            t.GetCreatedAt() > DateTime.Now.AddSeconds(-60));
+
+        if (!lastTransactions.Any())
+        {
+            logger.LogInformation("Nenhuma transação nos ultimos 60 segundos");
+            return Results.StatusCode(StatusCodes.Status422UnprocessableEntity);
+        }
+        
+        var count = lastTransactions.Count();
+        var sum = lastTransactions.Sum(t => t.GetValor());
+        var average = lastTransactions.Average(t => t.GetValor());
+        var max = lastTransactions.Max(t => t.GetValor());
+        var min = lastTransactions.Min(t => t.GetValor());
+        
+        var statistics = new 
+        {
+            Count = count,
+            Sum = sum,
+            Average = average,
+            Min = min,
+            Max = max
+        };
+        
+        logger.LogInformation("Estatísticas geradas.");
+        return Results.Json(statistics);
+    })
+    .Produces(StatusCodes.Status200OK)
+    .WithName("GetStatistics")
+    .WithOpenApi();
+
 app.MapDelete("/transacao", (ILogger<Program> logger) =>
     {
-        logger.LogInformation("Lista de transações apagada.");
+        logger.LogInformation($"Lista de transações apagada. {transactions.Count}");
         transactions.Clear();
-        Console.WriteLine(transactions.Count);
         return Results.StatusCode(StatusCodes.Status200OK);
     })
     .WithName("ClearTransactions")
