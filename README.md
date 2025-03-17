@@ -1,5 +1,7 @@
 # 🏦 Desafio Backend Unibanco - Port para C# (.NET)
 
+**Link original do desafio: https://github.com/feltex/desafio-itau-backend.git
+
 **Implementação didática** do desafio técnico originalmente proposto em Java/Spring, recriado em **C# (.NET 8)** utilizando:
 - **Minimal APIs** para simplicidade e performance
 - **Object Calisthenics** para qualidade de código
