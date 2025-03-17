@@ -1,4 +1,7 @@
-using DesafioUnibanco.Entities;
+using System.Reflection.Metadata.Ecma335;
+using System.Text.Json;
+using DesafioUnibanco.Domain.Entities;
+using DesafioUnibanco.Domain.ValueObjects;
 using Microsoft.Extensions.Logging.Console;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,9 +34,12 @@ app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) =
         {
             using var reader = new StreamReader(context.Request.Body);
             var body = await reader.ReadToEndAsync();
-            
-            var transaction = System.Text.Json.JsonSerializer.Deserialize<Transaction>(body, 
-                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                IncludeFields = true
+            };
+            var transaction = System.Text.Json.JsonSerializer.Deserialize<Transaction>(body, options);
             
             transactions.Add(transaction);
             logger.LogInformation($"Transação cadastrada.{transactions.Count}");
