@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var transactions = new List<Transaction>();
+var transactions = new TransactionList();
 
 app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) => 
     {
@@ -42,8 +42,7 @@ app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) =
             var transaction = System.Text.Json.JsonSerializer.Deserialize<Transaction>(body, options);
             
             transactions.Add(transaction);
-            logger.LogInformation($"Transação cadastrada.{transactions.Count}");
-            Console.WriteLine(transactions.Count);
+            logger.LogInformation("Transação cadastrada.");
             return Results.StatusCode(StatusCodes.Status201Created);
         }
         catch (ArgumentException e)
@@ -66,32 +65,16 @@ app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) =
 
 app.MapGet("/estatisca", (ILogger<Program> logger) =>
     {
-        var lastTransactions = transactions.Where(t => 
-            t.GetCreatedAt() > DateTime.Now.AddSeconds(-60));
+        var lastTransactions = transactions.GetEstatistics();
 
-        if (!lastTransactions.Any())
+        if (lastTransactions == null!)
         {
             logger.LogInformation("Nenhuma transação nos ultimos 60 segundos");
             return Results.StatusCode(StatusCodes.Status422UnprocessableEntity);
         }
-        
-        var count = lastTransactions.Count();
-        var sum = lastTransactions.Sum(t => t.GetValor());
-        var average = lastTransactions.Average(t => t.GetValor());
-        var max = lastTransactions.Max(t => t.GetValor());
-        var min = lastTransactions.Min(t => t.GetValor());
-        
-        var statistics = new 
-        {
-            Count = count,
-            Sum = sum,
-            Average = average,
-            Min = min,
-            Max = max
-        };
-        
-        logger.LogInformation("Estatísticas geradas.");
-        return Results.Json(statistics);
+
+        logger.LogInformation("Estatísticas das transações feitas nos úlmos 60 segundos geradas.");
+        return Results.Json(lastTransactions);
     })
     .Produces(StatusCodes.Status200OK)
     .WithName("GetStatistics")
@@ -99,8 +82,8 @@ app.MapGet("/estatisca", (ILogger<Program> logger) =>
 
 app.MapDelete("/transacao", (ILogger<Program> logger) =>
     {
-        logger.LogInformation($"Lista de transações apagada. {transactions.Count}");
-        transactions.Clear();
+        logger.LogInformation("Lista de transações apagada.");
+        transactions.ClearTransactionsList();
         return Results.StatusCode(StatusCodes.Status200OK);
     })
     .WithName("ClearTransactions")
