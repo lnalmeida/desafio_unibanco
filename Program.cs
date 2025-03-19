@@ -2,6 +2,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using DesafioUnibanco.Domain.Entities;
 using DesafioUnibanco.Domain.ValueObjects;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Console;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,9 +64,9 @@ app.MapPost("/transacao", async (HttpContext context, ILogger<Program> logger) =
     .WithName("AddTransaction")
     .WithOpenApi();
 
-app.MapGet("/estatisca", (ILogger<Program> logger) =>
+app.MapGet("/estatisca", (ILogger<Program> logger, [FromQuery] int seconds) =>
     {
-        var lastTransactions = transactions.GetEstatistics();
+        var lastTransactions = transactions.GetEstatistics(seconds);
 
         if (lastTransactions == null!)
         {
@@ -73,7 +74,7 @@ app.MapGet("/estatisca", (ILogger<Program> logger) =>
             return Results.StatusCode(StatusCodes.Status422UnprocessableEntity);
         }
 
-        logger.LogInformation("Estatísticas das transações feitas nos úlmos 60 segundos geradas.");
+        logger.LogInformation($"Estatísticas das transações feitas nos últimos {seconds} segundos geradas.");
         return Results.Json(lastTransactions);
     })
     .Produces(StatusCodes.Status200OK)

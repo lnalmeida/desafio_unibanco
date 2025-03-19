@@ -24,10 +24,10 @@ public class TransactionList
         _transactionList.Clear();
     }
     
-    public object GetEstatistics()
+    public object GetEstatistics(int seconds)
     {
         var lastTransactions = _transactionList.Where(t => 
-            t.GetCreatedAt() > DateTime.Now.AddSeconds(-60));
+            t.GetCreatedAt() > DateTime.Now.AddSeconds(-seconds));
         
         if (!lastTransactions.Any())
         {
